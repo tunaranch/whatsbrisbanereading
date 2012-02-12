@@ -24,11 +24,18 @@
             height: 350px;
         }
 
+        .book .thumbnail {
+            height: 200px;
+            overflow: hidden;
+
+        }
+
         .book .info h4 {
 
             margin-bottom: 10px;
             border-bottom: 1px solid #F5F5F5;
         }
+
 
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet"/>
@@ -80,7 +87,7 @@
 
     <!-- Example row of columns -->
     <div class="row">
-        <div id="#bookList"/>
+        <div id="bookList"></div>
     </div>
 
     <hr>
@@ -110,15 +117,13 @@
 <script src="js/bootstrap-carousel.js"></script>
 <script src="js/bootstrap-typeahead.js"></script>
 -->
-<script src="js/jsrender.js"></script>
-
 <script>
 
     var books = [
         {
             "title":"The Drop",
-            "author":"Michael Connelly,",
-            "thumbnailUrl":"sampledata/books-1.jpg",
+            "author":"Michael Connelly",
+            "thumbnailUrl":"sampledata/books-1.jpeg",
             "blurb":"He&#39;s been put on the DROP - Deferred Retirement Option Plan - and given three years before his retirement is enforced.",
             "eLibCatUrl":" http://elibcat.library.brisbane.qld.gov.au/uhtbin/cgisirsi/S/ZZELIBCAT/0/5/1?searchdata1=^C690402",
             "googleBooksUrl":"#"
@@ -126,7 +131,7 @@
         {
             "title":"The Litigators",
             "author":"John Grisham",
-            "thumbnailUrl":"sampledata/books.jpg",
+            "thumbnailUrl":"sampledata/books.jpeg",
             "blurb":"The Partners at Finley &amp; Figg - all two of them - often refer to themselves as &#39;a boutique law firm.",
             "eLibCatUrl":"http://elibcat.library.brisbane.qld.gov.au/uhtbin/cgisirsi/S/ZZELIBCAT/0/5/1?searchdata1=^C692901",
             "googleBooksUrl":"#"
@@ -134,7 +139,7 @@
         {
             "title":"The Confession",
             "author":"Charles Todd",
-            "thumbnailUrl":"sampledata/books-2.jpg",
+            "thumbnailUrl":"sampledata/books-2.jpeg",
             "blurb":"Scotland Yard&#39;s best detective, Inspector Ian Rutledge, must solve a dangerous case that reaches far into the past in this superb mystery in the acclaimed ...",
             "eLibCatUrl":"http://elibcat.library.brisbane.qld.gov.au/uhtbin/cgisirsi/S/ZZELIBCAT/0/5/1?searchdata1=^C698419",
             "googleBooksUrl":"#"
@@ -142,11 +147,36 @@
 
     ];
     $(document).ready(function () {
-        console.log("About to run template...")
-        $.template("bookTemplate", '<div class="span3 book"><div class="info"><h3>{{=title}}</h3><h4>{{=author}}</h4><p><img src="{{=thumbnailUrl}}"</p><p>{{=blurb}}</p></div><p class="btn-group"><a class="btn" href="{{=eLibCarUrl}}">eLibCat</a> <a class="btn" href="{{=googleBooksUrl}}">Google Books</a></p></div>');
-        $("#bookList").html($.render(books, "bookTemplate"));
-    });
+        console.log("About to run template...");
+        var templateHtml = "<div class='span3 book'><div class='info'><h3>{{=title}}</h3><h4>{{=author}}</h4><p><img src='{{=thumbnailUrl}}'</p><p>{{=blurb}}</p></div><p class='btn-group'><a class='btn' href='{{=eLibCarUrl}}'>eLibCat</a> <a class='btn' href='{{=googleBooksUrl}}'>Google Books</a></p></div>";
 
+
+        $(books).each(function (i, book) {
+            //$("#bookList").appendTo("div").addClass("span3").addClass("book").text(book.title);
+            var bookContainer = $('<div></div>', {
+                "class":'span3 book'
+
+
+            }).appendTo('#bookList');
+            var infoContainer = $("<div></div>", {
+                class:"info"
+            }).appendTo(bookContainer);
+
+            $("<h3></h3>", { text:book.title })
+                    .after($("<h4></h4>", {text:book.author}),
+                    $("<p></p>", {html:$("<img>", {src:book.thumbnailUrl})}), // todo: image
+                    $("<p></p>", {class:"blurb", text:book.blurb}))
+                    .appendTo(infoContainer);
+
+            infoContainer.after(
+                    $("<p></p>", {class:"btn-group" }
+                    ).append(
+                            $("<a></a>", {class:"btn", "text":"eLibCat", href:book.eLibCatUrl }),
+                            $("<a></a>", {class:"btn", "text":"Google Books", href:book.googleBooksUrl })
+                    )
+            );
+        }); // each()
+    });
 </script>
 
 </body>
