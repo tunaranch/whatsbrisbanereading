@@ -162,11 +162,12 @@
                 class:"info"
             }).appendTo(bookContainer);
 
-            $("<h3></h3>", { text:book.title })
-                    .after($("<h4></h4>", {text:book.author}),
-                    $("<p></p>", {html:$("<img>", {src:book.thumbnailUrl})}), // todo: image
-                    $("<p></p>", {class:"blurb", text:book.blurb}))
-                    .appendTo(infoContainer);
+            infoContainer.append(
+                    $("<h3></h3>", { text:book.title }),
+                    $("<h4></h4>", {text:book.author}),
+                    $("<p></p>", {html:$("<img>", {src:book.thumbnailUrl})}),
+                    $("<p></p>", {class:"blurb", text:book.blurb})
+            )
 
             infoContainer.after(
                     $("<p></p>", {class:"btn-group" }
