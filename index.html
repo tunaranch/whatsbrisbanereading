@@ -150,14 +150,11 @@
         console.log("About to run template...");
         var templateHtml = "<div class='span3 book'><div class='info'><h3>{{=title}}</h3><h4>{{=author}}</h4><p><img src='{{=thumbnailUrl}}'</p><p>{{=blurb}}</p></div><p class='btn-group'><a class='btn' href='{{=eLibCarUrl}}'>eLibCat</a> <a class='btn' href='{{=googleBooksUrl}}'>Google Books</a></p></div>";
 
-
         $(books).each(function (i, book) {
-            //$("#bookList").appendTo("div").addClass("span3").addClass("book").text(book.title);
             var bookContainer = $('<div></div>', {
                 "class":'span3 book'
-
-
             }).appendTo('#bookList');
+
             var infoContainer = $("<div></div>", {
                 class:"info"
             }).appendTo(bookContainer);
@@ -166,7 +163,7 @@
                     $("<h3></h3>", { text:book.title }),
                     $("<h4></h4>", {text:book.author}),
                     $("<p></p>", {html:$("<img>", {src:book.thumbnailUrl})}),
-                    $("<p></p>", {class:"blurb", text:book.blurb})
+                    $("<p></p>", {class:"blurb", html:book.blurb})
             )
 
             infoContainer.after(
