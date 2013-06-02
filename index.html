@@ -21,7 +21,7 @@
         }
 
         .book .info {
-            height: 350px;
+            /* height: 700px;*/
         }
 
         .book .thumbnail {
@@ -93,7 +93,7 @@
     <hr>
 
     <footer>
-        <p>&copy; Company 2012</p>
+        <p>Built with Bootstrap, jQuery, Google Books API, and Data from the data.gov.au beta. This is still a work in progress...</p>
     </footer>
 
 </div>
@@ -103,6 +103,7 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js"></script>
+<script src="js/uritemplates/jquery-uritemplate.1.0.min.js"></script>
 <!--
 <script src="js/bootstrap-transition.js"></script>
 <script src="js/bootstrap-alert.js"></script>
@@ -118,62 +119,71 @@
 <script src="js/bootstrap-typeahead.js"></script>
 -->
 <script>
-
-    var books = [
-        {
-            "title":"The Drop",
-            "author":"Michael Connelly",
-            "thumbnailUrl":"sampledata/books-1.jpeg",
-            "blurb":"He&#39;s been put on the DROP - Deferred Retirement Option Plan - and given three years before his retirement is enforced.",
-            "eLibCatUrl":" http://elibcat.library.brisbane.qld.gov.au/uhtbin/cgisirsi/S/ZZELIBCAT/0/5/1?searchdata1=^C690402",
-            "googleBooksUrl":"#"
-        },
-        {
-            "title":"The Litigators",
-            "author":"John Grisham",
-            "thumbnailUrl":"sampledata/books.jpeg",
-            "blurb":"The Partners at Finley &amp; Figg - all two of them - often refer to themselves as &#39;a boutique law firm.",
-            "eLibCatUrl":"http://elibcat.library.brisbane.qld.gov.au/uhtbin/cgisirsi/S/ZZELIBCAT/0/5/1?searchdata1=^C692901",
-            "googleBooksUrl":"#"
-        },
-        {
-            "title":"The Confession",
-            "author":"Charles Todd",
-            "thumbnailUrl":"sampledata/books-2.jpeg",
-            "blurb":"Scotland Yard&#39;s best detective, Inspector Ian Rutledge, must solve a dangerous case that reaches far into the past in this superb mystery in the acclaimed ...",
-            "eLibCatUrl":"http://elibcat.library.brisbane.qld.gov.au/uhtbin/cgisirsi/S/ZZELIBCAT/0/5/1?searchdata1=^C698419",
-            "googleBooksUrl":"#"
-        }
-
-    ];
     $(document).ready(function () {
-        console.log("About to run template...");
-        var templateHtml = "<div class='span3 book'><div class='info'><h3>{{=title}}</h3><h4>{{=author}}</h4><p><img src='{{=thumbnailUrl}}'</p><p>{{=blurb}}</p></div><p class='btn-group'><a class='btn' href='{{=eLibCarUrl}}'>eLibCat</a> <a class='btn' href='{{=googleBooksUrl}}'>Google Books</a></p></div>";
+        var request = $.ajax({
+            url: 'http://opendata.linkdigital.com.au/api/action/datastore_search_sql?sql=SELECT%20*%20FROM%20%2299bee72f-4a19-44f0-946b-2adc56ef199e%22%20WHERE%20%22Week%20Ending%22%20=%20(SELECT%20%20MAX(%22Week%20Ending%22)%20FROM%20%2299bee72f-4a19-44f0-946b-2adc56ef199e%22)'
 
-        $(books).each(function (i, book) {
-            var bookContainer = $('<div></div>', {
-                "class":'span3 book'
-            }).appendTo('#bookList');
+        });
 
-            var infoContainer = $("<div></div>", {
-                class:"info"
-            }).appendTo(bookContainer);
+        request.done(function (data) {
+            console.log(data.result.records);
+            var books = data.result.records;
+            $(books).each(function (i, book) {
 
-            infoContainer.append(
-                    $("<h3></h3>", { text:book.title }),
-                    $("<h4></h4>", {text:book.author}),
-                    $("<p></p>", {html:$("<img>", {src:book.thumbnailUrl})}),
-                    $("<p></p>", {class:"blurb", html:book.blurb})
-            )
 
-            infoContainer.after(
-                    $("<p></p>", {class:"btn-group" }
-                    ).append(
-                            $("<a></a>", {class:"btn", "text":"eLibCat", href:book.eLibCatUrl }),
-                            $("<a></a>", {class:"btn", "text":"Google Books", href:book.googleBooksUrl })
+                var bookContainer = $('<div></div>', {
+                    "class": 'span3 book'
+                }).appendTo('#bookList');
+
+                var infoContainer = $("<div></div>", {
+                    class: "info"
+                }).appendTo(bookContainer);
+
+                var title = book["Book Title"];
+                var author = book["Book Author"]
+                var imageLink = "" //TODO: Not found
+                var blurb = "Not found"
+                var googleBooksUrl = ""
+
+
+                var googleBookLookup = $.ajax({
+                    url: 'https://www.googleapis.com/books/v1/volumes?q=inauthor:{author} intitle:{title}&fields=items(volumeInfo(description,imageLinks,canonicalVolumeLink))&maxResults=1',
+                    tokens: { author: author, title: title}
+
+                });
+
+                googleBookLookup.done(function (bookData) {
+                    console.log(bookData);
+                    //TODO: Check if there is a result first...
+                    imageLink = bookData.items[0].volumeInfo.imageLinks.thumbnail;
+                    blurb = bookData.items[0].volumeInfo.description;
+                    googleBooksUrl = bookData.items[0].volumeInfo.canonicalVolumeLink
+
+
+                    infoContainer.append(
+                            $("<h3></h3>", { text: title }),
+                            $("<h4></h4>", {text: author}),
+
+                            $("<p></p>", {html: $("<img>", {src: imageLink})}),
+                            $("<p></p>", {class: "blurb", html: blurb})
                     )
-            );
-        }); // each()
+
+                    infoContainer.after(
+                            $("<p></p>", {class: "btn-group" }
+                            ).append(
+                                            $("<a></a>", {class: "btn", "text": "eLibCat", href: book["eLibcat Link"] }),
+                                            $("<a></a>", {class: "btn", "text": "Google Books", href: googleBooksUrl })
+                                    )
+                    );
+
+                });
+
+
+            }); // each()
+
+        });
+
+
     });
 </script>
 
