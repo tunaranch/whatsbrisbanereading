@@ -23,6 +23,6 @@ Built with:
  * jQuery URI template plugin http://jqueryuritemplates.anthonyvanderhoorn.com/
  * data.gov.au beta: http://opendata.linkdigital.com.au/
  * Google Books API: http://code.google.com/apis/books/docs/v1/getting_started.html
- 
-Thanks, BCC for the data.
+
+Thanks, BCC for the data, and the data.gov.au team for actually making it accessible ;)
 
