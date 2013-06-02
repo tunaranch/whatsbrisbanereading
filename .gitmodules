@@ -1,0 +1,3 @@
+[submodule "wbr"]
+	path = wbr
+	url = git://github.com/tunaranch/whatsbrisbanereading.git
