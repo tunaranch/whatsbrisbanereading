@@ -9,27 +9,36 @@
 
 			function bookReceived(book, container) {
 				var bookContainer = $('<div></div>', {
-					"class": 'span3 book'
+					"class": 'book row'
 				}).appendTo(container);
 
-				var infoContainer = $("<div></div>", {
-					class: "info"
+				var imageContainer = $("<div></div>", {
+					class: "info span2"
 				}).appendTo(bookContainer);
 
-				infoContainer.append(
+				var detailsContainer = $("<div></div>", {
+					class: "info span9"
+				}).appendTo(bookContainer);
+
+
+				imageContainer.append(
+					$("<p></p>", {html: $("<img>", {src: book.imageLink})})
+				);
+
+
+				detailsContainer.append(
 					$("<h3></h3>", { text: book.title }),
 					$("<h4></h4>", {text: book.author}),
-
-					$("<p></p>", {html: $("<img>", {src: book.imageLink})}),
-					$("<p></p>", {class: "blurb", html: book.blurb})
-				)
-
-				infoContainer.after(
+					$("<p></p>", {class: "blurb", html: book.blurb}),
 					$("<p></p>", {class: "btn-group" }
 					).append(
 							$("<a></a>", {class: "btn", "text": "eLibCat", href: book.eLibcatUrl }),
 							$("<a></a>", {class: "btn", "text": "Google Books", href: book.googleBooksUrl })
 						)
+				)
+
+				detailsContainer.append(
+
 				);
 
 			}
