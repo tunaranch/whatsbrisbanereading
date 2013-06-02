@@ -1,21 +1,21 @@
-t's Brisbane Reading?
+# What's Brisbane Reading?
 
 This is a mash of data from the data.gov.au beta (http://opendata.linkdigital.com.au/) and Google Books.
 
 It lists the top 10 Fiction books for the current week. (Assuming the data is kept up to date).
 
-# Running
+## Running
 
 Check out, and open index.html in a browser.
 
-# TODO
+## TODO
 
 * Clean up javascript
 * Javascript error handling
 * Make layout look better
 * Clean up attributions in the footer
 
-# Acknowlegements
+## Acknowlegements
 
 Built with:
  * Twitter Bootstrap
