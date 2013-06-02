@@ -32,7 +32,7 @@
 					$("<p></p>", {class: "blurb", html: book.blurb}),
 					$("<p></p>", {class: "btn-group" }
 					).append(
-							$("<a></a>", {class: "btn", "text": "eLibCat", href: book.eLibcatUrl }),
+							$("<a></a>", {class: "btn", "text": "BCC Library", href: book.eLibcatUrl }),
 							$("<a></a>", {class: "btn", "text": "Google Books", href: book.googleBooksUrl })
 						)
 				)
