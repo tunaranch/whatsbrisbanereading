@@ -6,7 +6,7 @@ It lists the top 10 Fiction books for the current week. (Assuming the data is ke
 
 ## Running
 
-Check out, and open index.html in a browser.
+Check out, and open index.html in a browser, or visit http://tunaranch.github.io/whatsbrisbanereading/
 
 ## TODO
 
